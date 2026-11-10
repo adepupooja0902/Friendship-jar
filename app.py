@@ -56,6 +56,25 @@ st.markdown(
         to { opacity: 1; transform: translateY(0); }
     }
     
+    /* Rolling Laddu Animation */
+    @keyframes rollLaddu {
+        0% { transform: translateX(-100px) rotate(0deg); }
+        100% { transform: translateX(350px) rotate(720deg); }
+    }
+
+    .rolling-container {
+        text-align: center;
+        margin: 30px 0;
+        overflow: hidden;
+        height: 60px;
+    }
+
+    .rolling-emoji {
+        display: inline-block;
+        font-size: 3rem;
+        animation: rollLaddu 1.2s ease-in-out infinite;
+    }
+    
     .stButton>button {
         width: 100%;
         border-radius: 16px;
@@ -80,7 +99,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- Personalized Notes Database (Easy to add more categories later!) ---
+# --- Personalized Notes Database ---
 NOTES_DB = {
     "😄 Happy & Monkeying Around": [
         "Yay! Seeing you win makes your favorite Laddu's day 10x better. Remember our laughs from '25? Let's celebrate over video call tonight!",
@@ -107,10 +126,6 @@ NOTES_DB = {
         "Remember all those random late-night talks? Even with the new city and time zones, some things never change.",
         "Just a reminder that you're stuck with your Laddu for life, no matter how many pin codes change. Cheers to our 2024–forever journey! 🥂",
     ],
-    # 💡 Tip: You can add new categories here easily anytime!
-    # "☕ Coffee Break Vibes": [
-    #     "Put the work down for 10 minutes and go grab a good cup of filter coffee!"
-    # ]
 }
 
 # --- App Header ---
@@ -139,39 +154,79 @@ col1, col2, col3 = st.columns(3)
 with col1:
     if st.button("🐒\nHappy"):
         st.session_state.active_mood = "😄 Happy & Monkeying Around"
+        st.session_state.selected_note = None  # Reset briefly for animation
+        with st.spinner("Rolling out a sweet note from Laddu..."):
+            st.markdown(
+                '<div class="rolling-container"><span class="rolling-emoji">🥏</span></div>',
+                unsafe_allow_html=True,
+            )
+            time.sleep(1.2)
         st.session_state.selected_note = random.choice(
             NOTES_DB[st.session_state.active_mood]
         )
+        st.rerun()
 
 with col2:
     if st.button("🥺\nMiss You"):
         st.session_state.active_mood = "🥺 Missing Your Laddu"
+        st.session_state.selected_note = None
+        with st.spinner("Rolling out a sweet note from Laddu..."):
+            st.markdown(
+                '<div class="rolling-container"><span class="rolling-emoji">🥏</span></div>',
+                unsafe_allow_html=True,
+            )
+            time.sleep(1.2)
         st.session_state.selected_note = random.choice(
             NOTES_DB[st.session_state.active_mood]
         )
+        st.rerun()
 
 with col3:
     if st.button("🌪️\nStressed"):
         st.session_state.active_mood = "🌪️ Stressed / Overwhelmed"
+        st.session_state.selected_note = None
+        with st.spinner("Rolling out a sweet note from Laddu..."):
+            st.markdown(
+                '<div class="rolling-container"><span class="rolling-emoji">🥏</span></div>',
+                unsafe_allow_html=True,
+            )
+            time.sleep(1.2)
         st.session_state.selected_note = random.choice(
             NOTES_DB[st.session_state.active_mood]
         )
+        st.rerun()
 
 col4, col5 = st.columns(2)
 
 with col4:
     if st.button("😂\nNeed a Laugh"):
         st.session_state.active_mood = "😂 Need a Good Laugh"
+        st.session_state.selected_note = None
+        with st.spinner("Rolling out a sweet note from Laddu..."):
+            st.markdown(
+                '<div class="rolling-container"><span class="rolling-emoji">🥏</span></div>',
+                unsafe_allow_html=True,
+            )
+            time.sleep(1.2)
         st.session_state.selected_note = random.choice(
             NOTES_DB[st.session_state.active_mood]
         )
+        st.rerun()
 
 with col5:
     if st.button("🕰️\nMemories"):
         st.session_state.active_mood = "🕰️ Core Memories"
+        st.session_state.selected_note = None
+        with st.spinner("Rolling out a sweet note from Laddu..."):
+            st.markdown(
+                '<div class="rolling-container"><span class="rolling-emoji">🥏</span></div>',
+                unsafe_allow_html=True,
+            )
+            time.sleep(1.2)
         st.session_state.selected_note = random.choice(
             NOTES_DB[st.session_state.active_mood]
         )
+        st.rerun()
 
 # --- Display Note if Clicked ---
 if st.session_state.selected_note:
@@ -208,8 +263,6 @@ with st.form("reply_form"):
 
     if submitted:
         if monkey_note.strip():
-            # In a live app, you can hook this up to Formspree or an email script.
-            # For now, it shows a sweet confirmation message!
             st.success(
                 " Yay! Your note has been safely stored in the jar for Laddu to read."
             )
