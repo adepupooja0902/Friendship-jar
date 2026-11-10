@@ -11,13 +11,11 @@ st.set_page_config(
 st.markdown(
     """
     <style>
-    /* Warm, cozy background gradient */
     .stApp {
         background: linear-gradient(135deg, #fef6e4 0%, #f3d250 100%);
         background-attachment: fixed;
     }
     
-    /* Header styling */
     .main-title {
         text-align: center;
         color: #1b263b;
@@ -32,7 +30,6 @@ st.markdown(
         margin-bottom: 30px;
     }
 
-    /* Note Display Card */
     .note-card {
         background: #ffffff;
         color: #2b2d42;
@@ -43,13 +40,22 @@ st.markdown(
         margin-top: 25px;
         animation: fadeIn 0.5s ease-in-out;
     }
+    
+    .inbox-card {
+        background: #ffffff;
+        color: #2b2d42;
+        border-radius: 20px;
+        padding: 25px;
+        box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+        border-left: 8px solid #2a9d8f;
+        margin-top: 30px;
+    }
 
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(10px); }
         to { opacity: 1; transform: translateY(0); }
     }
     
-    /* Custom styling for Streamlit buttons acting as jar icons */
     .stButton>button {
         width: 100%;
         border-radius: 16px;
@@ -74,7 +80,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
-# --- Personalized Notes Database ---
+# --- Personalized Notes Database (Easy to add more categories later!) ---
 NOTES_DB = {
     "😄 Happy & Monkeying Around": [
         "Yay! Seeing you win makes your favorite Laddu's day 10x better. Remember our laughs from '25? Let's celebrate over video call tonight!",
@@ -101,6 +107,10 @@ NOTES_DB = {
         "Remember all those random late-night talks? Even with the new city and time zones, some things never change.",
         "Just a reminder that you're stuck with your Laddu for life, no matter how many pin codes change. Cheers to our 2024–forever journey! 🥂",
     ],
+    # 💡 Tip: You can add new categories here easily anytime!
+    # "☕ Coffee Break Vibes": [
+    #     "Put the work down for 10 minutes and go grab a good cup of filter coffee!"
+    # ]
 }
 
 # --- App Header ---
@@ -115,13 +125,13 @@ st.markdown(
 
 st.write("---")
 
-# Initialize session state to track the active selected note
+# Initialize session state
 if "selected_note" not in st.session_state:
     st.session_state.selected_note = None
 if "active_mood" not in st.session_state:
     st.session_state.active_mood = None
 
-# --- Spread Out Icon Grid (2 rows) ---
+# --- Spread Out Icon Grid ---
 st.markdown("### ✨ Tap a jar to open:")
 
 col1, col2, col3 = st.columns(3)
@@ -163,7 +173,7 @@ with col5:
             NOTES_DB[st.session_state.active_mood]
         )
 
-# --- Display Note if a Jar was Clicked ---
+# --- Display Note if Clicked ---
 if st.session_state.selected_note:
     st.markdown(
         f"""
@@ -175,6 +185,37 @@ if st.session_state.selected_note:
         unsafe_allow_html=True,
     )
     st.balloons()
+
+st.write("---")
+
+# --- Feature: Leave a Note / Journal Back for Laddu ---
+st.markdown(
+    """
+    <div class="inbox-card">
+        <h3 style="color: #2a9d8f; margin-top: 0;">📮 Drop a note back for Laddu</h3>
+        <p style="font-size: 0.95em; color: #555;">Got a random thought, a funny update from Bangalore, or want to journal your day? Leave it here so your Laddu can read it!</p>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
+
+with st.form("reply_form"):
+    monkey_note = st.text_area(
+        "Write your note here, Monkey:",
+        placeholder="Type something here... (e.g., Today in Bangalore traffic I survived...)",
+    )
+    submitted = st.form_submit_button("Send to Laddu 💌")
+
+    if submitted:
+        if monkey_note.strip():
+            # In a live app, you can hook this up to Formspree or an email script.
+            # For now, it shows a sweet confirmation message!
+            st.success(
+                " Yay! Your note has been safely stored in the jar for Laddu to read."
+            )
+            st.balloons()
+        else:
+            st.warning("Please write a little something before sending!")
 
 # --- Footer ---
 st.write("\n\n")
